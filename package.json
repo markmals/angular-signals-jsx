@@ -1,12 +1,12 @@
 {
   "name": "angular-signals-jsx",
-  "description": "Vue Reactivity with a Fine-Grained Renderer",
-  "version": "0.3.0",
-  "author": "Ryan Carniato",
+  "description": "Angular Signals with a Fine-Grained Renderer",
+  "version": "0.0.0",
+  "author": "Mark Malstrom",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ryansolid/vuerx-jsx"
+    "url": "https://github.com/markmals/angular-signals-jsx"
   },
   "module": "dist/index.js",
   "main": "lib/index.js",
@@ -19,15 +19,16 @@
     "csstype": "^3.1.0"
   },
   "devDependencies": {
+    "@angular/core": "16.0.0-next.4",
     "@babel/core": "7.19.3",
     "@babel/preset-typescript": "7.18.6",
     "@rollup/plugin-babel": "5.3.1",
     "@rollup/plugin-node-resolve": "14.1.0",
-    "@angular/core": "16.0.0-next.4",
     "dom-expressions": "0.34.12",
     "hyper-dom-expressions": "0.34.12",
     "lit-dom-expressions": "0.34.12",
     "ncp": "2.0.0",
+    "np": "^7.7.0",
     "rollup": "^2.41.4",
     "typescript": "4.8.4"
   },
