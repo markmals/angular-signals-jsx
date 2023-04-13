@@ -1,6 +1,6 @@
 # Angular Signals JSX
 
-This library is a fork of Ryan Carniato's [VueRX JSX](), which implements a [DOM Expressions]() runtime using the signals found in [`@angular/core`]() v16.0.0-next.4 (since versions after that are too tied into Angular's runtime to be useful on their own). This implementation provides considerably better performance than pairing Angular's signals with their dirty-checking Zone.js change detection methods.
+This library is a fork of Ryan Carniato's [VueRX JSX](https://github.com/ryansolid/vuerx-jsx), which implements a [DOM Expressions](https://github.com/ryansolid/dom-expressions) runtime using the signals found in [`@angular/core` v16.0.0-next.4](https://github.com/angular/angular/tree/0dd5c4781119489758c6634102d73c268a38681e/packages/core/src/signals) (since versions after that are too tied into Angular's runtime to be useful on their own). This implementation provides considerably better performance than pairing Angular's signals with their dirty-checking Zone.js change detection methods.
 
 It accomplishes this with using [Babel Plugin JSX DOM Expressions](https://github.com/ryansolid/dom-expressions). It compiles JSX to DOM statements and wraps expressions in functions that can be called by the library of choice. In this case `effect` wraps these expressions ensuring the view stays up to date. Unlike with Angular's ChangeDetector, only the changed nodes are affected and the whole tree is not re-rendered over and over.
 
@@ -46,7 +46,7 @@ For TS JSX types add to your `tsconfig.json`:
 
 ## Example
 
-[Angular Counter](https://codesandbox.io/s/vue-jsx-counter-nbqbj?file=/index.js)
+[Angular Counter]()
 
 ## API
 
