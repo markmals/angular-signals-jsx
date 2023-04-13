@@ -1,4 +1,4 @@
-import type { Signal } from "@angular/core";
+import type { SettableSignal, Signal } from "@angular/core";
 import { effect as _effect, computed, signal, untracked } from "@angular/core";
 import type { JSX } from "./jsx";
 
@@ -76,7 +76,7 @@ export function createSelector<T, U extends T>(
   source: () => T,
   fn: (a: U, b: T) => boolean = (a, b) => a === b
 ) {
-  let subs = new Map();
+  let subs = new Map<U, SettableSignal<U | undefined | null>>();
   let v: T;
   effect((p?: U) => {
     v = source();
@@ -85,17 +85,17 @@ export function createSelector<T, U extends T>(
       const key = keys[i];
       if (fn(key, v) || (p !== undefined && fn(key, p))) {
         const o = subs.get(key);
-        o.value = null;
+        o?.set(null);
       }
     }
     return v as U;
   });
   return (key: U) => {
-    let l: Signal<U | undefined> & { _count?: number };
-    if (!(l = subs.get(key))) subs.set(key, (l = signal<U>(undefined as U)));
+    let l: (Signal<U | undefined | null> & { _count?: number }) | undefined;
+    if (!(l = subs.get(key))) subs.set(key, (l = signal(undefined)));
     l();
     l._count ? l._count++ : (l._count = 1);
-    cleanup(() => (l._count! > 1 ? l._count!-- : subs.delete(key)));
+    cleanup(() => (l!._count! > 1 ? l!._count!-- : subs.delete(key)));
     return fn(key, v);
   };
 }
