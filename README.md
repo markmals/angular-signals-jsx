@@ -18,14 +18,22 @@ And include 'babel-plugin-jsx-dom-expressions' in your Vite config.
 
 ```js
 import { defineConfig } from "vite";
-import babel from "vite-plugin-babel";
+import babel from "@rollup/plugin-babel";
 
 export default defineConfig({
   plugins: [
     babel({
-      babelConfig: {
-        plugins: [["jsx-dom-expressions", { moduleName: "angular-signals-jsx" }]]
-      }
+      exclude: "node_modules/**",
+      babelHelpers: "bundled",
+      extensions: ["ts", "tsx"],
+      plugins: [
+        [
+          "jsx-dom-expressions",
+          {
+            moduleName: "angular-signals-jsx"
+          }
+        ]
+      ]
     })
   ]
 });
@@ -44,9 +52,11 @@ For TS JSX types add to your `tsconfig.json`:
 > npm install angular-signals-jsx babel-plugin-jsx-dom-expressions
 ```
 
-## Example
+## Examples
 
-[Angular Counter]()
+- [Angular Signals JSX counter](https://stackblitz.com/edit/angular-signals-jsx-counter?file=main.tsx)
+- [Vite starter kit](https://github.com/markmals/angular-signals-jsx-vite-starter)
+- [JavaScript Frameworks Benchmark](https://github.com/markmals/js-framework-benchmark/blob/angular/frameworks/keyed/angular-signals-jsx/src/main.jsx)
 
 ## API
 
