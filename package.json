@@ -1,7 +1,7 @@
 {
   "name": "angular-signals-jsx",
   "description": "Angular Signals with a Fine-Grained Renderer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Mark Malstrom",
   "license": "MIT",
   "repository": {
