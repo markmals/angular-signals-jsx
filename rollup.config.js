@@ -1,12 +1,12 @@
-import babel from '@rollup/plugin-babel';
-import nodeResolve from '@rollup/plugin-node-resolve';
+import babel from "@rollup/plugin-babel";
+import nodeResolve from "@rollup/plugin-node-resolve";
 
 const plugins = [
   nodeResolve({
-    extensions: ['.js', '.ts']
+    extensions: [".js", ".ts"]
   }),
   babel({
-    extensions: ['.js', '.ts'],
+    extensions: [".js", ".ts"],
     babelHelpers: "bundled",
     presets: ["@babel/preset-typescript"],
     plugins: [
@@ -21,37 +21,50 @@ const plugins = [
   })
 ];
 
-export default [{
-  input: 'src/index.ts',
-  output: [{
-    format: 'cjs',
-    file: 'lib/index.js'
-  }, {
-    format: 'es',
-    file: 'dist/index.js'
-  }],
-  external: ['@vue/reactivity'],
-  plugins
-}, {
-  input: 'src/html.ts',
-  output: [{
-    format: 'cjs',
-    file: 'lib/html.js'
-  }, {
-    format: 'es',
-    file: 'dist/html.js'
-  }],
-  external: ['./index', '@vue/reactivity'],
-  plugins
-}, {
-  input: 'src/h.ts',
-  output: [{
-    format: 'cjs',
-    file: 'lib/h.js'
-  }, {
-    format: 'es',
-    file: 'dist/h.js'
-  }],
-  external: ['./index', '@vue/reactivity'],
-  plugins
-}];
+export default [
+  {
+    input: "src/index.ts",
+    output: [
+      {
+        format: "cjs",
+        file: "lib/index.js"
+      },
+      {
+        format: "es",
+        file: "dist/index.js"
+      }
+    ],
+    external: ["@angular/core"],
+    plugins
+  },
+  {
+    input: "src/html.ts",
+    output: [
+      {
+        format: "cjs",
+        file: "lib/html.js"
+      },
+      {
+        format: "es",
+        file: "dist/html.js"
+      }
+    ],
+    external: ["./index", "@angular/core"],
+    plugins
+  },
+  {
+    input: "src/h.ts",
+    output: [
+      {
+        format: "cjs",
+        file: "lib/h.js"
+      },
+      {
+        format: "es",
+        file: "dist/h.js"
+      }
+    ],
+    external: ["./index", "@angular/core"],
+    plugins
+  }
+];

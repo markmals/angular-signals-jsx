@@ -1,5 +1,5 @@
 {
-  "name": "vuerx-jsx/h",
+  "name": "angular-signals-jsx/h",
   "main": "../lib/h.js",
   "module": "../dist/h.js",
   "types": "../types/h.d.ts",

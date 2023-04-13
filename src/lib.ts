@@ -1,12 +1,5 @@
-import {
-  effect as vEffect,
-  computed,
-  stop,
-  shallowRef,
-  pauseTracking,
-  resetTracking,
-  ShallowRef
-} from "@vue/reactivity";
+import type { Signal } from "@angular/core";
+import { effect as _effect, computed, signal, untracked } from "@angular/core";
 import type { JSX } from "./jsx";
 
 type ContextOwner = {
@@ -23,10 +16,7 @@ export interface Context {
 let globalContext: ContextOwner | null = null;
 
 export function untrack(fn: () => any) {
-  pauseTracking();
-  const v = fn();
-  resetTracking();
-  return v;
+  return untracked(fn);
 }
 
 export function root<T>(fn: (dispose: () => void) => T) {
@@ -60,9 +50,9 @@ export function effect<T>(fn: (prev?: T) => T, current?: T) {
       const d = context.disposables;
       context.disposables = [];
       for (let k = 0, len = d.length; k < len; k++) d[k]();
-      final && stop(c);
+      final && ref.destroy();
     },
-    c = vEffect(() => {
+    ref = _effect(() => {
       cleanupFn(false);
       globalContext = context;
       current = fn(current);
@@ -73,13 +63,13 @@ export function effect<T>(fn: (prev?: T) => T, current?: T) {
 
 // only updates when boolean expression changes
 export function memo<T>(fn: () => T, equal?: boolean): () => T {
-  const o = shallowRef(untrack(fn));
+  const o = signal(untrack(fn));
   effect(prev => {
     const res = fn();
-    (!equal || prev !== res) && (o.value = res);
+    (!equal || prev !== res) && o.set(res);
     return res;
   });
-  return () => o.value;
+  return o;
 }
 
 export function createSelector<T, U extends T>(
@@ -101,9 +91,9 @@ export function createSelector<T, U extends T>(
     return v as U;
   });
   return (key: U) => {
-    let l: ShallowRef<U | undefined> & { _count?: number };
-    if (!(l = subs.get(key))) subs.set(key, (l = shallowRef<U>()));
-    l.value;
+    let l: Signal<U | undefined> & { _count?: number };
+    if (!(l = subs.get(key))) subs.set(key, (l = signal<U>(undefined as U)));
+    l();
     l._count ? l._count++ : (l._count = 1);
     cleanup(() => (l._count! > 1 ? l._count!-- : subs.delete(key)));
     return fn(key, v);
@@ -130,10 +120,10 @@ export function createComponent<T extends { children?: JSX.Element }>(
 export function lazy<T extends Function>(fn: () => Promise<{ default: T }>) {
   return (props: object) => {
     let Comp: T;
-    const result = shallowRef();
-    fn().then(component => (result.value = component.default));
-    const rendered = computed(() => (Comp = result.value) && untrack(() => Comp(props)));
-    return () => rendered.value;
+    const result = signal<T>(undefined as any as T);
+    fn().then(component => result.set(component.default));
+    const rendered = computed(() => (Comp = result()) && untrack(() => Comp(props)));
+    return () => rendered();
   };
 }
 
@@ -216,9 +206,9 @@ function lookup(owner: ContextOwner | null, key: symbol | string): any {
 
 function resolveChildren(children: any): any {
   if (typeof children === "function") {
-    const c = shallowRef();
-    effect(() => (c.value = children()));
-    return () => c.value;
+    const c = signal(undefined);
+    effect(() => c.set(children()));
+    return c;
   }
   if (Array.isArray(children)) {
     const results: any[] = [];
@@ -233,12 +223,12 @@ function resolveChildren(children: any): any {
 
 function createProvider(id: symbol) {
   return function provider(props: { value: unknown; children: any }) {
-    let rendered = shallowRef();
+    let rendered = signal(undefined);
     effect(() => {
       globalContext!.context = { [id]: props.value };
-      rendered.value = untrack(() => resolveChildren(props.children));
+      rendered.set(untrack(() => resolveChildren(props.children)));
     });
-    return () => rendered.value;
+    return rendered;
   };
 }
 
